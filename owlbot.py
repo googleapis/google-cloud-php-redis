@@ -14,48 +14,30 @@
 
 """This script is used to synthesize generated parts of this library."""
 
-import synthtool as s
-import synthtool.gcp as gcp
 import logging
+from pathlib import Path
+import subprocess
+
+import synthtool as s
+from synthtool.languages import php
+from synthtool import _tracked_paths
 
 logging.basicConfig(level=logging.DEBUG)
 
-gapic = gcp.GAPICBazel()
-common = gcp.CommonTemplates()
+src = Path(f"../{php.STAGING_DIR}/Redis").resolve()
+dest = Path().resolve()
 
-v1beta1_library = gapic.php_library(
-    service='redis',
-    version='v1beta1',
-    bazel_target='//google/cloud/redis/v1beta1:google-cloud-redis-v1beta1-php',
+# Added so that we can pass copy_excludes in the owlbot_main() call
+_tracked_paths.add(src)
+
+php.owlbot_main(
+    src=src,
+    dest=dest,
+    copy_excludes=[
+        src / "*/src/*/*Client.php"
+    ]
 )
 
-# copy all src except partial veneer classes
-s.move(v1beta1_library / f'src/V1beta1/Gapic')
-s.move(v1beta1_library / f'src/V1beta1/resources')
-
-# copy proto files to src also
-s.move(v1beta1_library / f'proto/src/Google/Cloud/Redis', f'src/')
-s.move(v1beta1_library / f'tests/')
-
-# copy GPBMetadata file to metadata
-s.move(v1beta1_library / f'proto/src/GPBMetadata/Google/Cloud/Redis', f'metadata/')
-
-v1_library = gapic.php_library(
-    service='redis',
-    version='v1',
-    bazel_target='//google/cloud/redis/v1:google-cloud-redis-v1-php',
-)
-
-# copy all src except partial veneer classes
-s.move(v1_library / f'src/V1/Gapic')
-s.move(v1_library / f'src/V1/resources')
-
-# copy proto files to src also
-s.move(v1_library / f'proto/src/Google/Cloud/Redis', f'src/')
-s.move(v1_library / f'tests/')
-
-# copy GPBMetadata file to metadata
-s.move(v1_library / f'proto/src/GPBMetadata/Google/Cloud/Redis', f'metadata/')
 
 # document and utilize apiEndpoint instead of serviceAddress
 s.replace(
@@ -81,16 +63,6 @@ s.replace(
     r'^(\s+\*\n)?\s+\*\s@experimental\n',
     '')
 
-
-# fix year
-s.replace(
-    '**/Gapic/*GapicClient.php',
-    r'Copyright \d{4}',
-    r'Copyright 2018')
-s.replace(
-    'tests/**/V1*/*Test.php',
-    r'Copyright \d{4}',
-    r'Copyright 2018')
 
 # Change the wording for the deprecation warning.
 s.replace(
