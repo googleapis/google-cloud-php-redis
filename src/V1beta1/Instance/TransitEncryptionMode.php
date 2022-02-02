@@ -7,37 +7,35 @@ namespace Google\Cloud\Redis\V1beta1\Instance;
 use UnexpectedValueException;
 
 /**
- * Available connection modes.
+ * Available TLS modes.
  *
- * Protobuf type <code>google.cloud.redis.v1beta1.Instance.ConnectMode</code>
+ * Protobuf type <code>google.cloud.redis.v1beta1.Instance.TransitEncryptionMode</code>
  */
-class ConnectMode
+class TransitEncryptionMode
 {
     /**
      * Not set.
      *
-     * Generated from protobuf enum <code>CONNECT_MODE_UNSPECIFIED = 0;</code>
+     * Generated from protobuf enum <code>TRANSIT_ENCRYPTION_MODE_UNSPECIFIED = 0;</code>
      */
-    const CONNECT_MODE_UNSPECIFIED = 0;
+    const TRANSIT_ENCRYPTION_MODE_UNSPECIFIED = 0;
     /**
-     * Connect via direct peering to the Memorystore for Redis hosted service.
+     * Client to Server traffic encryption enabled with server authentication.
      *
-     * Generated from protobuf enum <code>DIRECT_PEERING = 1;</code>
+     * Generated from protobuf enum <code>SERVER_AUTHENTICATION = 1;</code>
      */
-    const DIRECT_PEERING = 1;
+    const SERVER_AUTHENTICATION = 1;
     /**
-     * Connect your Memorystore for Redis instance using Private Service
-     * Access. Private services access provides an IP address range for multiple
-     * Google Cloud services, including Memorystore.
+     * TLS is disabled for the instance.
      *
-     * Generated from protobuf enum <code>PRIVATE_SERVICE_ACCESS = 2;</code>
+     * Generated from protobuf enum <code>DISABLED = 2;</code>
      */
-    const PRIVATE_SERVICE_ACCESS = 2;
+    const DISABLED = 2;
 
     private static $valueToName = [
-        self::CONNECT_MODE_UNSPECIFIED => 'CONNECT_MODE_UNSPECIFIED',
-        self::DIRECT_PEERING => 'DIRECT_PEERING',
-        self::PRIVATE_SERVICE_ACCESS => 'PRIVATE_SERVICE_ACCESS',
+        self::TRANSIT_ENCRYPTION_MODE_UNSPECIFIED => 'TRANSIT_ENCRYPTION_MODE_UNSPECIFIED',
+        self::SERVER_AUTHENTICATION => 'SERVER_AUTHENTICATION',
+        self::DISABLED => 'DISABLED',
     ];
 
     public static function name($value)
@@ -62,5 +60,5 @@ class ConnectMode
 }
 
 // Adding a class alias for backwards compatibility with the previous class name.
-class_alias(ConnectMode::class, \Google\Cloud\Redis\V1beta1\Instance_ConnectMode::class);
+class_alias(TransitEncryptionMode::class, \Google\Cloud\Redis\V1beta1\Instance_TransitEncryptionMode::class);
 
